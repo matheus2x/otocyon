@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+		"outDir": "./build",
+    "module": "CommonJS",
+    "allowJs": true,
+    "noEmit": false,
+		"lib": ["ES2019"],
+    "baseUrl": "src",
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+		"sourceMap": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "src/__tests__"]
+}
