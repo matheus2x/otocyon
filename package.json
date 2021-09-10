@@ -1,30 +1,31 @@
 {
-  "name": "ts-boilerplate",
-	"description": "My personal typescript boilerplate for general use",
+  "name": "otocyon",
+  "description": "My first restify project",
   "version": "1.0.0",
-	"private": true,
-	"author": {
-		"name": "Matheus Henrique",
-		"email": "matheushenriqueplus99@gmail.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/matheus2x/typescript-boilerplate.git"
-	},
-	"license": "MIT",
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "https://www.mit.edu/~amini/LICENSE.md"
-		}
-	],
-	"homepage": "https://github.com/matheus2x/typescript-boilerplate#readme",
+  "private": true,
+  "author": {
+    "name": "Matheus Henrique",
+    "email": "matheushenriqueplus99@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheus2x/otocyon.git"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://www.mit.edu/~amini/LICENSE.md"
+    }
+  ],
+  "homepage": "https://github.com/matheus2x/otocyon#readme",
   "bugs": {
-    "url": "https://github.com/matheus2x/typescript-boilerplate#issues"
+    "url": "https://github.com/matheus2x/otocyon#issues"
   },
   "scripts": {
     "build": "tsc",
     "start": "node build/index.js",
+		"dev": "tsnd --respawn ./src/index.ts",
     "lint": "eslint src --max-warnings=0",
     "prepare": "husky install",
     "test": "jest --maxWorkers=50%",
@@ -36,7 +37,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-			"pre-push": "npm run test:ci"
+      "pre-push": "npm run test:ci"
     }
   },
   "lint-staged": {
@@ -45,9 +46,14 @@
       "npm run test --findRelatedTests --bail"
     ]
   },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "restify": "^8.5.1"
+  },
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@types/node": "^16.9.1",
+    "@types/restify": "^8.5.2",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "eslint": "^7.32.0",
@@ -59,6 +65,7 @@
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.0",
     "ts-jest": "^27.0.5",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.2"
   }
 }

@@ -1,3 +1,6 @@
-const message = "Hello World!";
+import server from "./server";
+import { env } from "./config";
 
-console.log(message);
+server.listen(env.nodePort, () => {
+	console.log(`[Server]: Server Online - Listening on ${env.nodePort}`);
+});
