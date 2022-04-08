@@ -1,4 +1,4 @@
-import { ProfileValues, ValuesIndexes } from "../protocols";
+import { ProfileValues, ValuesIndexes } from "./protocols";
 
 const getProfileValues = (pageSelector: cheerio.Root): ProfileValues => {
 	const getValues = (_: number, element: cheerio.Element) => {
