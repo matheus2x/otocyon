@@ -1,9 +1,10 @@
 import { Server } from "restify";
 
-import * as steamController from "../controllers/steamController";
+import steamController from "../controllers/steamController";
 
 const steamRoutes = (server: Server) => {
-	server.get("/steam/profile", steamController.show);
+	server.get("/steam", steamController.base);
+	server.get("/steam/profile", steamController.profile);
 };
 
 export default steamRoutes;
