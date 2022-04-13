@@ -9,7 +9,7 @@ import {
 } from "./protocols";
 
 import { env } from "../../../../config";
-import hoursToMinutes from "./hoursToMinutes";
+import minuteToHours from "./minuteToHours";
 import requestSteamAPI from "../../../clients/steam";
 
 const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
@@ -102,7 +102,7 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 		},
 	} = await requestSteamAPI("getOwnedGames", getOwnedGamesPayload);
 
-	const totalTimePlayed = hoursToMinutes(ownedGame.playtime_forever);
+	const totalTimePlayed = minuteToHours(ownedGame.playtime_forever);
 	platinumGameData.totalTimePlayed = totalTimePlayed;
 
 	const lastFiveAchievs = achievsInfo

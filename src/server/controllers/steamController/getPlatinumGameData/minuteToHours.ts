@@ -1,4 +1,4 @@
-const hoursToMinutes = (minutes: number): string => {
+const minuteToHours = (minutes: number): string => {
 	const moveMinutesToIntPart = (timeInHours: number) => timeInHours * 100;
 	const moveMinutesToDecimalPart = (timeInHours: number) => timeInHours / 100;
 
@@ -14,4 +14,4 @@ const hoursToMinutes = (minutes: number): string => {
 	return formatedHourWithMinutes;
 };
 
-export default hoursToMinutes;
+export default minuteToHours;
