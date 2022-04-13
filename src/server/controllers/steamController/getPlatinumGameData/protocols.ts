@@ -10,6 +10,8 @@ export interface AchievementInfo {
 	icon: string;
 }
 
+export type AchievementSchema = Omit<AchievementInfo, "unlockTime">;
+
 export interface PlatinumGame {
 	playerID: string;
 	gameID: string | number;

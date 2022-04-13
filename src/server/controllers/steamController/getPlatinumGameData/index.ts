@@ -1,8 +1,15 @@
 import { Request, Response, Next } from "restify";
 import { find, forEach, addIndex } from "ramda";
 
-import { AchievementStatus, AchievementInfo, PlatinumGame } from "./protocols";
+import {
+	AchievementStatus,
+	AchievementInfo,
+	AchievementSchema,
+	PlatinumGame,
+} from "./protocols";
+
 import { env } from "../../../../config";
+import hoursToMinutes from "./hoursToMinutes";
 import requestSteamAPI from "../../../clients/steam";
 
 const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
@@ -35,10 +42,11 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 	};
 
 	const alreadyAchieved = 1;
+	const achievAlreadyDone = (achiev: AchievementStatus) =>
+		achiev.achieved === alreadyAchieved;
+
 	const allDoneGameAchievements =
-		playerAchievements.playerstats.achievements.every(
-			(achiev: AchievementStatus) => achiev.achieved === alreadyAchieved
-		);
+		playerAchievements.playerstats.achievements.every(achievAlreadyDone);
 
 	if (!allDoneGameAchievements) {
 		res.json(404, {
@@ -52,6 +60,7 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 		key: env.steamKey,
 		appid: steamGameID,
 	};
+
 	const schemaForGame = await requestSteamAPI(
 		"getSchemaForGame",
 		schemaForGamePayload
@@ -60,10 +69,13 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 	const achievsInfo: Array<AchievementInfo> = [];
 
 	const getAchievsInfo = (_: any, i: number): void => {
-		const { icon } = schemaForGame.game.availableGameStats.achievements.find(
-			(game: Omit<AchievementInfo, "unlockTime">) =>
-				game.name === playerAchievements.playerstats.achievements[i].apiname
-		);
+		const findAchievsByName = (achiev: AchievementSchema) =>
+			achiev.name === playerAchievements.playerstats.achievements[i].apiname;
+
+		const { icon } =
+			schemaForGame.game.availableGameStats.achievements.find(
+				findAchievsByName
+			);
 
 		achievsInfo.push({
 			name: playerAchievements.playerstats.achievements[i].apiname,
@@ -90,15 +102,13 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 		},
 	} = await requestSteamAPI("getOwnedGames", getOwnedGamesPayload);
 
-	const totalTimePlayed = Math.round(
-		((ownedGame.playtime_forever / 60) * 100) / 100
-	).toFixed(2);
+	const totalTimePlayed = hoursToMinutes(ownedGame.playtime_forever);
+	platinumGameData.totalTimePlayed = totalTimePlayed;
 
 	const lastFiveAchievs = achievsInfo
 		.sort((a, b) => (a.unlockTime < b.unlockTime ? 1 : -1))
 		.slice(0, 5);
 
-	platinumGameData.totalTimePlayed = totalTimePlayed;
 	platinumGameData.lastFiveAchievs = lastFiveAchievs;
 
 	res.json(200, { platinumGameData });
