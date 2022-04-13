@@ -1,8 +1,9 @@
 import { Request, Response, Next } from "restify";
 import { find, forEach, addIndex } from "ramda";
-import axios from "axios";
 
+import { AchievementStatus, AchievementInfo, PlatinumGame } from "./protocols";
 import { env } from "../../../../config";
+import requestSteamAPI from "../../../clients/steam";
 
 const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 	const requiredFields = ["steamProfileID", "steamGameID"];
@@ -15,38 +16,16 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 
 	const { steamProfileID, steamGameID } = req.params;
 
-	const steamAPI = axios.create({ baseURL: "http://api.steampowered.com" });
-	const steamAPIMethods = {
-		getPlayerAchievements: "ISteamUserStats/GetPlayerAchievements/v1",
-		getSchemaForGame: "ISteamUserStats/GetSchemaForGame/v2",
-		getOwnedGames: "IPlayerService/GetOwnedGames/v1",
-	};
-
 	const playerAchievementsPayload = {
 		key: env.steamKey,
 		appid: steamGameID,
 		steamid: steamProfileID,
 	};
-	const { data: playerAchievements } = await steamAPI.get(
-		steamAPIMethods.getPlayerAchievements,
-		{ params: playerAchievementsPayload }
+
+	const playerAchievements = await requestSteamAPI(
+		"getPlayerAchievements",
+		playerAchievementsPayload
 	);
-
-	interface AchievementInfo {
-		name: string;
-		unlockTime: number;
-		icon: string;
-	}
-
-	interface PlatinumGame {
-		playerID: string;
-		gameID: string | number;
-		gameName: string;
-		gameThumb: string;
-		achievsLength?: number;
-		totalTimePlayed?: string | number;
-		lastFiveAchievs?: Array<AchievementInfo>;
-	}
 
 	const platinumGameData: PlatinumGame = {
 		playerID: steamProfileID,
@@ -55,16 +34,10 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 		gameThumb: `https://steamcdn-a.akamaihd.net/steam/apps/${steamGameID}/capsule_616x353.jpg`,
 	};
 
-	interface Achievement {
-		apiname?: string;
-		achieved: number;
-		unlockTime: number;
-	}
-
 	const alreadyAchieved = 1;
 	const allDoneGameAchievements =
 		playerAchievements.playerstats.achievements.every(
-			(achiev: Achievement) => achiev.achieved === alreadyAchieved
+			(achiev: AchievementStatus) => achiev.achieved === alreadyAchieved
 		);
 
 	if (!allDoneGameAchievements) {
@@ -79,9 +52,9 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 		key: env.steamKey,
 		appid: steamGameID,
 	};
-	const { data: schemaForGame } = await steamAPI.get(
-		steamAPIMethods.getSchemaForGame,
-		{ params: schemaForGamePayload }
+	const schemaForGame = await requestSteamAPI(
+		"getSchemaForGame",
+		schemaForGamePayload
 	);
 
 	const achievsInfo: Array<AchievementInfo> = [];
@@ -110,15 +83,12 @@ const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
 		format: "json",
 		"appids_filter[0]": steamGameID,
 	};
+
 	const {
-		data: {
-			response: {
-				games: [ownedGame],
-			},
+		response: {
+			games: [ownedGame],
 		},
-	} = await steamAPI.get(steamAPIMethods.getOwnedGames, {
-		params: getOwnedGamesPayload,
-	});
+	} = await requestSteamAPI("getOwnedGames", getOwnedGamesPayload);
 
 	const totalTimePlayed = Math.round(
 		((ownedGame.playtime_forever / 60) * 100) / 100
