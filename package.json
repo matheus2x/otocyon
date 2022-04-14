@@ -24,7 +24,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js",
+    "prod:start": "npm run build && npm run start",
+		"start": "node build/index.js",
     "dev": "tsnd --respawn ./src/index.ts",
     "lint": "eslint src --max-warnings=0",
     "prepare": "husky install",
