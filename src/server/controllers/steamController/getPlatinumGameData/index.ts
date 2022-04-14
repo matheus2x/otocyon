@@ -1,5 +1,11 @@
 import { Request, Response, Next } from "restify";
-import { find, forEach, addIndex } from "ramda";
+import { forEach, addIndex } from "ramda";
+
+import { env } from "../../../../config";
+import { validatePayload } from "../../../utils/functions";
+import payloadSchema from "./payloadSchema";
+import minuteToHours from "./minuteToHours";
+import requestSteamAPI from "../../../clients/steam";
 
 import {
 	AchievementStatus,
@@ -8,20 +14,14 @@ import {
 	PlatinumGame,
 } from "./protocols";
 
-import { env } from "../../../../config";
-import minuteToHours from "./minuteToHours";
-import requestSteamAPI from "../../../clients/steam";
-
 const getPlatinumGameData = async (req: Request, res: Response, next: Next) => {
-	const requiredFields = ["steamProfileID", "steamGameID"];
-	const findMissingField = (field: string) => !req.params?.[field];
-	const is_missingFields = find(findMissingField, requiredFields); //requiredFields.find(findMissingField);
-	if (is_missingFields) {
-		res.json(400, { BadRequest: "Missing some field" });
+	const requestFields = await validatePayload(req.params, payloadSchema);
+	if (!requestFields.valid) {
+		res.json(400, { BadRequest: requestFields.errorMsg });
 		return next();
 	}
 
-	const { steamProfileID, steamGameID } = req.params;
+	const { steamProfileID, steamGameID } = requestFields;
 
 	const playerAchievementsPayload = {
 		key: env.steamKey,
