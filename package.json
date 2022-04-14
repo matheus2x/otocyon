@@ -26,7 +26,7 @@
     "build": "tsc",
     "prod:start": "npm run build && npm run start",
     "start": "node build/index.js",
-    "postinstall": "tsc && mv -i -v public build/ && rm -v -rf src",
+    "postinstall": "tsc",
     "dev": "tsnd --respawn ./src/index.ts",
     "lint": "eslint src --max-warnings=0",
     "prepare": "husky install",
