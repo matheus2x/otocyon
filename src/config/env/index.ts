@@ -1,7 +1,8 @@
 import * as dotenv from "dotenv";
 import path from "path";
 
-const dotenvFile = path.resolve(__dirname, "..", "..", "..", ".env");
+const dirName = path.resolve(path.dirname(""));
+const dotenvFile = path.resolve(dirName, "..", "..", "..", ".env");
 
 dotenv.config({ path: dotenvFile });
 
