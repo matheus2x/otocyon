@@ -9,7 +9,15 @@
 
 ## :thinking: What is this?
 
-This is the an REST API to get Infos about trophies and achievements in gamer platforms (steam, xbox, playstation).
+This is the an REST API to get Infos about trophies and achievements in gamer platforms (steam, xbox, playstation). It is also the first time that I use some of these techs (restify, heroku, cheerio)
+
+## :rocket: Techs used
+
+- **Node.js** - A JavaScript Interpreter
+- **TypeScript** - A Superset for JavaScript
+- **Restify** - A framework to building RESTful web services
+- **Heroku** - A cloud service used to deploy
+- **Cheerio** - JQuery but for server
 
 
 ## :fire: Getting started
