@@ -1,4 +1,5 @@
 import { Request, Response, Next } from "restify";
+import { map } from "ramda";
 
 import requestXboxAPI from "../../../clients/xbox";
 
@@ -17,13 +18,15 @@ const profile = async (req: Request, res: Response, next: Next) => {
 	}
 	const xboxID = profileUsers[0].id;
 
-	const { value: avatarImg } = profileUsers[0].settings.find(
-		(item: ProfileSetting) => item.id === "GameDisplayPicRaw"
-	);
+	const matchTags = ["GameDisplayPicRaw", "Gamertag"];
 
-	const { value: nickname } = profileUsers[0].settings.find(
-		(item: ProfileSetting) => item.id === "Gamertag"
-	);
+	const mapTags = (value: string) => {
+		return profileUsers[0].settings.find(
+			(item: ProfileSetting) => item.id === value
+		);
+	};
+
+	const [{ value: avatarImg }, { value: nickname }] = map(mapTags, matchTags);
 
 	const profileData = {
 		avatarImg,
