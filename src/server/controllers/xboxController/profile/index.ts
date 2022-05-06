@@ -3,8 +3,8 @@ import { Request, Response, Next } from "restify";
 import requestXboxAPI from "../../../clients/xbox";
 
 const profile = async (req: Request, res: Response, next: Next) => {
-	const { xblToken = false } = req.query;
-	const { profileUsers } = await requestXboxAPI("getProfile", { xblToken });
+	const { xblToken: profileToken = false } = req.query;
+	const { profileUsers } = await requestXboxAPI("getProfile", { profileToken });
 
 	if (profileUsers.length < 1) {
 		res.json(500, { Error: "Internal Server Error!" });
