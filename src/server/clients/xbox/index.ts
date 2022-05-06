@@ -9,8 +9,18 @@ const requestXboxAPI = async (xboxService: XboxService, payload?: any) => {
 	});
 
 	const xboxServices: XboxServices = {
-		account: {
+		getProfile: {
 			url: "account",
+			method: "GET",
+			headers: { "X-Authorization": payload?.profileToken || xboxKey },
+		},
+		getAchievements: {
+			url: "achievements",
+			method: "GET",
+			headers: { "X-Authorization": payload?.profileToken || xboxKey },
+		},
+		getPlayerTitleAchievements: {
+			url: `achievements/title/${payload.gameID}`,
 			method: "GET",
 			headers: { "X-Authorization": payload?.profileToken || xboxKey },
 		},
