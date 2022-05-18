@@ -3,7 +3,7 @@ import { find } from "ramda";
 
 import searchProfile from "./searchProfile";
 
-const profile = async (req: Request, res: Response, next: Next) => {
+const getProfileData = async (req: Request, res: Response, next: Next) => {
 	const requiredFields = ["steamURL"];
 	const findMissingField = (field: string) => !req.params?.[field];
 	const is_missingFields = find(findMissingField, requiredFields); //requiredFields.find(findMissingField);
@@ -19,4 +19,4 @@ const profile = async (req: Request, res: Response, next: Next) => {
 	return next();
 };
 
-export default profile;
+export default getProfileData;

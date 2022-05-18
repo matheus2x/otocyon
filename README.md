@@ -37,7 +37,7 @@ But if you want to run local, you can follow next steps:<br>
 ## :orange_book: API Usage
 
 * [Steam](#steam)
-	* [SteamProfile](#2)
+	* [getProfileData](#2)
 	* [GetPlatinumGameData](#3)
 * [Xbox]
 	* Comming soon...
@@ -53,8 +53,8 @@ But if you want to run local, you can follow next steps:<br>
 <div id='2' />
 
 
-## SteamProfile
-**Endpoint:** `{{baseURL}}/steam/profile`
+## getProfileData
+**Endpoint:** `/steam/getProfileData`
 
 **Method:** GET
 
@@ -102,7 +102,7 @@ steamURL|Yes|String|Steam Profile ID
 
 
 ## GetPlatinumGameData
-**Endpoint:** `{{baseURL}}/steam/getPlatinumGameData`
+**Endpoint:** `/steam/getPlatinumGameData`
 
 **Method:** GET
 

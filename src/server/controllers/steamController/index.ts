@@ -1,9 +1,9 @@
 import base from "./base";
-import profile from "./profile";
+import getProfileData from "./getProfileData";
 import getPlatinumGameData from "./getPlatinumGameData";
 
 export default {
 	base,
-	profile,
+	getProfileData,
 	getPlatinumGameData,
 };
